@@ -1,4 +1,4 @@
-package Auth
+package dummyAuth
 
 import (
 	"context"
@@ -8,11 +8,9 @@ import (
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"webServer/common"
 	"webServer/dataBaseLib"
-	"webServer/dataBaseLib/schema"
 )
 
 var (
@@ -26,10 +24,12 @@ var scopeGoogleOauth = []string{
 	"https://www.googleapis.com/auth/userinfo.profile",
 }
 var redirectUrlGoogleOauth = common.LocalGetEnv("redirectUrlGoogleOauth")
+var hostAddr = common.LocalGetEnv("hostAddr")
+var hostPort = common.LocalGetEnv("hostPort")
 
 func init() {
 	googleOauthConfig = &oauth2.Config{
-		RedirectURL:  "http://localhost:8421/auth" + redirectUrlGoogleOauth,
+		RedirectURL:  hostAddr+hostPort+"/auth" + redirectUrlGoogleOauth,
 		ClientID:     common.LocalGetEnv("ClientID"),
 		ClientSecret: common.LocalGetEnv("GoAuthSecret"),
 		Scopes:       scopeGoogleOauth,
@@ -72,39 +72,31 @@ func handleGoogleCallback(ctx iris.Context) {
 		return
 	}
 	if !contentJson.VerifiedEmail {
-		ctx.JSON("u")
+		ctx.JSON("Please Verify your email first")
+		return
 	}
-	var userInfo schema.JWTModel
 	//@TODO -> before creating the user,I must include _id in userInfo
 	resultDB := dataBase.FindUserByEmail(contentJson.Email)
 	sentData := struct {
 		Password string
-		Token    string
 	}{}
-	userInfo.Email = contentJson.Email
-	userInfo.Name = contentJson.Name
+
 	if resultDB.Err() != nil {
-		userData,passwordData, err := dataBase.CreateUser(contentJson.Email, contentJson.Name, contentJson.Picture)
+		passwordData, err := dataBase.CreateUser(contentJson.Email, contentJson.Name, contentJson.Picture)
 		if err != nil {
 			ctx.StatusCode(iris.StatusInternalServerError)
 			return
 		}
-		fmt.Printf("%T ",userData.InsertedID)
-		fmt.Println(userData.InsertedID)
-		//userInfo.Id=userData.InsertedID
 		sentData.Password = passwordData
-		//ctx.JSON("Your Password is %s \nPlease change password as soon as possible.\n",passwordData)
 	} else {
-		var data schema.User
-		err = resultDB.Decode(&data)
-		userInfo.Id = data.Id
+		passwordData, err := dataBase.GenerateNewUserPassword(contentJson.Email, "")
+		if err != nil {
+			ctx.StatusCode(iris.StatusInternalServerError)
+			return
+		}
+		sentData.Password = passwordData
 	}
-	//token, err := common.GenerateToken(userInfo)
-	//if err != nil {
-	//	ctx.StatusCode(iris.StatusInternalServerError)
-	//	return
-	//}
-	//sentData.Token = string(token)
+
 	ctx.JSON(sentData)
 }
 
@@ -131,14 +123,4 @@ func getUserInfo(state string, code string) ([]byte, error) {
 	//fmt.Println(string(contents))
 	return contents, nil
 }
-func loginHandler(ctx iris.Context)  {
-	userData:= struct {
-		Email string
-		Password string
-	}{}
-	err:= ctx.ReadJSON(&userData)
-	if err!=nil{
-		log.Println(err)
-	}
-	ctx.JSON(userData)
-}
+

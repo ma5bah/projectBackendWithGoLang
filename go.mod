@@ -5,6 +5,7 @@ go 1.17
 require (
 	github.com/kataras/iris/v12 v12.2.0-alpha2.0.20210907152838-01b459fa5048
 	go.mongodb.org/mongo-driver v1.7.2
+	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5
 	golang.org/x/oauth2 v0.0.0-20210819190943-2bc19b11175f
 )
 
@@ -54,7 +55,6 @@ require (
 	github.com/xdg-go/stringprep v1.0.2 // indirect
 	github.com/yosssi/ace v0.0.5 // indirect
 	github.com/youmark/pkcs8 v0.0.0-20181117223130-1be2e3e5546d // indirect
-	golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97 // indirect
 	golang.org/x/net v0.0.0-20210716203947-853a461950ff // indirect
 	golang.org/x/sync v0.0.0-20201020160332-67f06af15bc9 // indirect
 	golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c // indirect

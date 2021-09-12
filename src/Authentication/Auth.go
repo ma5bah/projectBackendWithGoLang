@@ -1,23 +1,14 @@
-package Auth
+package dummyAuth
 
-import (
-	"fmt"
-	"github.com/kataras/iris/v12"
-)
-
-func Server(app *iris.Application) {
-	fmt.Println(googleOauthConfig.RedirectURL)
-	//app := iris.New()
-	loginAPI := app.Party("/auth")
-	{
-		// loginAPI.Use(iris.Compression)
-		
-
-		// GET: http://localhost:8080/books
-		loginAPI.Get("/", handleMain)
-		loginAPI.Post("/", loginHandler)
-		// POST: http://localhost:8080/books
-		loginAPI.Get("/google", handleGoogleLogin)
-		loginAPI.Get(redirectUrlGoogleOauth, handleGoogleCallback)
-	}
-}
+//func Server(app *iris.Application) {
+//	fmt.Println(googleOauthConfig.RedirectURL)
+//	//app := iris.New()
+//	loginAPI := app.Party("/auth")
+//	{
+//		loginAPI.Use(iris.Compression)
+//		loginAPI.Post("/", loginHandler)
+//		loginAPI.Post("/changepassword",common.VerifyJwtMiddleware(), changePasswordHandler)
+//		loginAPI.Get("/google", handleGoogleLogin)
+//		loginAPI.Get(redirectUrlGoogleOauth, handleGoogleCallback)
+//	}
+//}

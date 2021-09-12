@@ -3,8 +3,10 @@ package main
 import (
 	"github.com/kataras/iris/v12"
 	"log"
-	"webServer/src/Authentication"
-	"webServer/src/api/routine"
+	"os"
+	"webServer/common"
+	userAPI "webServer/src/api/Authentication"
+	"webServer/src/api/Routine"
 )
 
 func checkError(err error) {
@@ -22,8 +24,9 @@ func checkError(err error) {
 
 func Server() {
 	app := iris.New()
-	Auth.Server(app)
-	API.RoutineEntryRoute(app)
+	app.Logger().SetOutput(os.Stdout)
+	userAPI.UserEntryRoute(app)
+	routineAPI.RoutineEntryRoute(app)
 	booksAPI := app.Party("/api")
 	{
 		booksAPI.Use(iris.Compression)
@@ -34,7 +37,7 @@ func Server() {
 		booksAPI.Post("/", create)
 	}
 
-	app.Listen(":8421")
+	app.Listen(common.LocalGetEnv("hostPort"))
 
 }
 

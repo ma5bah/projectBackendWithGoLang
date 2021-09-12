@@ -5,32 +5,23 @@ import (
 	"time"
 )
 
-//@Todo connect with routine schema
-//type User struct {
-//	ID primitive.ObjectID
-//	Email string
-//	Password string
-//	ProfilePicture string
-//	FullName string
-//	Active string
-//	UserName string
-//	JoinedAt string
-//	Routines []string
-//}
+//@Todo connect with Routine schema
+
 type RoutineStruct struct {
 	Id primitive.ObjectID `bson:"_id" json:"id"`
+	Name          string               `json:"name"`
 }
 type User struct {
 	Id             primitive.ObjectID `bson:"_id" json:"id"`
-	Email string                      `json:"email"`
+	Email          string             `json:"email"`
 	Name           string             `json:"name"`
 	ProfilePicture string             `json:"profilePicture"`
 	Routines       []RoutineStruct    `json:"Routines"`
-	//Username string `json:"username"`
-	Password string `json:"password"`
-	JoinedAt time.Time `json:"joinedAt"`
+	Password       string             `json:"password"`
+	JoinedAt       time.Time          `json:"joinedAt"`
+	Bio string `json:"username"`
 }
-type jwtData struct {
+type OAuthDataModel struct {
 	Name          string `json:"name"`
 	Email         string `json:"email"`
 	Picture       string `json:"picture"`
