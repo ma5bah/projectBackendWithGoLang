@@ -46,7 +46,7 @@ func updateOrDeleteSlot(ctx iris.Context) {
 			//"access.$._id": jwtModelData.Id,
 		},
 		bson.M{
-			"$set": bson.M{"slot.$[element].title": inputData.Title, "slot.$[element].note": inputData.Message},
+			"$set": bson.M{"slot.$[element].title": inputData.Title, "slot.$[element].note": inputData.Message,"slot.$[element].updatedat":time.Now()},
 		},
 		options.FindOneAndUpdate().SetArrayFilters(options.ArrayFilters{Filters: []interface{}{bson.M{"element._id": inputData.SlotID}}}),
 	)

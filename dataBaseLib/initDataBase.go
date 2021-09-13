@@ -16,7 +16,6 @@ import (
 )
 
 var (
-	//globalCtx context.Context
 	dataBase=Init()
 	docDB = dataBase.Collection("doc")
 	UserDB=dataBase.Collection("Users")
@@ -32,19 +31,12 @@ func Init() *mongo.Database {
 	if err != nil {
 		log.Fatal(err)
 	}
-	//defer func() {
-	//	if err = client.Disconnect(ctx); err != nil {
-	//		panic(err)
-	//	}
-	//}()
-	// Ping the primary
 	if err := client.Ping(ctx, readpref.Primary()); err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
-	//globalCtx = ctx
-	fmt.Println("Successfully connected to dataBase.")
-	quickStartDatabase := client.Database("quickStart")
-	return quickStartDatabase
+	log.Println("Successfully connected to dataBase.")
+	notioBomb := client.Database("testingNotio")
+	return notioBomb
 }
 
 func CreateArray() {

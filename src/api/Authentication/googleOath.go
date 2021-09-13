@@ -8,6 +8,7 @@ import (
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"webServer/common"
 	dataBase "webServer/dataBaseLib"
@@ -50,13 +51,6 @@ func handleGoogleCallback(ctx iris.Context) {
 		ctx.Redirect("/", http.StatusTemporaryRedirect)
 		return
 	}
-	//contentJson := struct {
-	//	Name          string `json:"name"`
-	//	Email         string `json:"email"`
-	//	Picture       string `json:"picture"`
-	//	Id            string `json:"id"`
-	//	VerifiedEmail bool   `json:"verified_email"`
-	//}{}
 	var contentJson schema.OAuthDataModel
 	err = json.Unmarshal(content, &contentJson)
 	if err != nil {
@@ -76,6 +70,7 @@ func handleGoogleCallback(ctx iris.Context) {
 	if resultDB.Err() != nil {
 		passwordData, err := dataBase.CreateUser(contentJson.Email, contentJson.Name, contentJson.Picture)
 		if err != nil {
+
 			ctx.StatusCode(iris.StatusInternalServerError)
 			return
 		}
@@ -83,6 +78,7 @@ func handleGoogleCallback(ctx iris.Context) {
 	} else {
 		err:=dataBase.SyncUser(contentJson.Email, contentJson.Name, contentJson.Picture)
 		if err != nil {
+			log.Println(err)
 			ctx.StatusCode(iris.StatusInternalServerError)
 			return
 		}

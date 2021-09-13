@@ -45,6 +45,7 @@ func CreateUser(Email, Name, ProfilePicture string) (string, error) {
 		Password:       hashedPassword,
 		JoinedAt:       time.Now(),
 		Routines:       []schema.RoutineStruct{},
+		Bio:            "Hey there! I am using Notio",
 	})
 	if err != nil {
 		return "", err
@@ -60,8 +61,8 @@ func SyncUser(Email, Name, ProfilePicture string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	//updatedResult := UserDB.FindOneAndUpdate(ctx, bson.M{"email": emailData},bson.M{"$set": bson.M{"name": nameData, "profilePicture": pictureData}})
-	updatedResult := UserDB.FindOneAndUpdate(ctx, bson.M{"email": emailData}, bson.M{"name": nameData, "profilePicture": pictureData})
+	updatedResult := UserDB.FindOneAndUpdate(ctx, bson.M{"email": emailData},bson.M{"$set": bson.M{"name": nameData, "profilePicture": pictureData}})
+	//updatedResult := UserDB.FindOneAndUpdate(ctx, bson.M{"email": emailData}, bson.M{"name": nameData, "profilePicture": pictureData})
 
 	if updatedResult.Err() != nil {
 		return updatedResult.Err()

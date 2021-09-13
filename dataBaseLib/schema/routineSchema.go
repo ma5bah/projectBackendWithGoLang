@@ -5,10 +5,13 @@ import (
 	"time"
 )
 
+//@todo Add functionality to updated slot and represent data better
+
 type SlotStruct struct {
-	Id    primitive.ObjectID `bson:"_id" json:"id"`
-	Title string             `json:"title"`
-	Note  string             `json:"note"`
+	Id        primitive.ObjectID `bson:"_id" json:"id"`
+	Title     string             `json:"title"`
+	Note      string             `json:"note"`
+	UpdatedAt time.Time          `json:"updatedat"`
 }
 type NotificationStruct struct {
 	Id        primitive.ObjectID `bson:"_id" json:"id"`

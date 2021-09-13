@@ -12,6 +12,7 @@ func UserEntryRoute( app *iris.Application)  {
 
 		User.Post("/",viewUserProfile)
 		User.Post("/changepassword",changePasswordHandler)
+		User.Post("/updatebio",updateBioHandler)
 		//User.Post("/syncprofile",syncProfile)
 
 		//User.Post("/updateslot", updateOrDeleteSlot)
